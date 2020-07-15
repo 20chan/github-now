@@ -14,10 +14,6 @@
       "scripts": ["background.js"],
       "persistent": false
     },
-    "browser_action": {
-      "default_popup": "config-popup/index.html",
-      "default_title": "github-now config"
-    },
     "web_accessible_resources": ["assets/*"],
     "content_security_policy": "script-src 'self' 'unsafe-eval' 'sha256-Cl5OZC4yJd9TPhQE0hFJ3c4uToSV2Sl9HXj28C+DKWo='; object-src 'self'"
   }
