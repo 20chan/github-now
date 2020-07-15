@@ -6,7 +6,7 @@ Update your profile with the song you are listening at youtube music, using chro
 
 ## Howto
 
-This project is under WIP, be careful when use;
+Beware it's WIP project;
 
 1. Create and edit `README.Template.md` file in profile repository
 2. Create github personal oauth token
