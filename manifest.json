@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "github-now",
     "version": "1.0.0",
-    "permissions": ["tabs", "activeTab", "storage", "alarms"],
+    "permissions": ["tabs", "activeTab", "storage", "alarms", "*://*/*"],
     "content_scripts": [
       {
         "js": ["contentscript.js"],
