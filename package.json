@@ -1,0 +1,39 @@
+{
+  "name": "github-now",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:contentscript-background": "NODE_ENV=production webpack --config webpack.config.js",
+    "build": "npm run build:contentscript-background",
+    "watch:contentscript-background": "NODE_ENV=development webpack --config webpack.config.js -w",
+    "watch": "run-p watch:*",
+    "clean": "rm -rf dist && cpy manifest.json dist && cpy src/assets/* dist/assets",
+    "prebuild": "npm run clean",
+    "prewatch": "npm run clean",
+    "build:config-popup": "npm run build --prefix src/config-popup && cd src/config-popup/build && cpy * /static/* ../../../dist/config-popup --parents",
+    "watch:config-popup": "npm run watch:build --prefix src/config-popup"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chrome": "0.0.120",
+    "@types/node": "^14.0.23",
+    "awesome-typescript-loader": "^5.2.1",
+    "cpy-cli": "^3.1.1",
+    "cra-build-watch": "^3.2.0",
+    "css-loader": "^3.6.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.14.1",
+    "npm-run-all": "^4.1.5",
+    "sass-loader": "^9.0.2",
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.6",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {}
+}
