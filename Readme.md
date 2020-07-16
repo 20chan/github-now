@@ -8,6 +8,7 @@ Update your profile with the song you are listening, using chrome extensions, in
 
 - Youtube Music
 - Soundcloud
+- Spotify
 
 ## Howto
 
@@ -15,7 +16,7 @@ Beware it's WIP project;
 
 1. Create and edit `README.Template.md` file in profile repository
 2. Create github personal oauth token
-3. Edit [background.ts](/src/background/background.ts), line 47 and 48, replace id and oauth token
+3. Edit [background.ts](/src/background/background.ts), line 122 and 123, replace id and oauth token
 4. `npm install && npm run build`
 5. Install unpacked extension in chrome, `/dist`
 
