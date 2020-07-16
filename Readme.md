@@ -2,7 +2,12 @@
 
 ![preview](/preview.png)
 
-Update your profile with the song you are listening at youtube music, using chrome extensions, in real time.
+Update your profile with the song you are listening, using chrome extensions, in real time.
+
+## Supported Platforms
+
+- Youtube Music
+- Soundcloud
 
 ## Howto
 
@@ -16,11 +21,13 @@ Beware it's WIP project;
 
 ## Templates
 
+- `{CURRENT_PLAYING_SOURCE}`
 - `{CURRENT_PLAYING_NAME}`
 - `{CURRENT_PLAYING_ARTISTS}`
 - `{CURRENT_PLAYING_ALBUM}`
 - `{CURRENT_PLAYING_RELEASED}`
 - `{CURRENT_PLAYING_ALBUM_SRC}`
+- `{CURRENT_PLAYING_URL}`
 - `{CURRENT_PLAYING_LAST_UPDATED}`
 
 ## Todo
