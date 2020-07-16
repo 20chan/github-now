@@ -1,7 +1,7 @@
 import { isUndefined } from "util";
 
 interface PlayingInfo {
-    src: 'YTMusic' | 'SoundCloud';
+    src: 'YTMusic' | 'SoundCloud' | 'Spotify';
     name: string;
     artists: string;
     album?: string;
@@ -83,6 +83,37 @@ const report = () => {
                     });
                 });
             }
+            if (t.audible && t.url.startsWith('https://open.spotify.com/')) {
+                chrome.tabs.executeScript(t.id, {
+                    /* 
+                     * Spotify web player doesn't give album and year information
+                     * TrackName
+                     * Artists
+                     * Cover Image URL (currently there are several images in different resolutions, workaround needed)
+                     * Track Album Link
+                     */
+                    code: `[
+                        document.querySelector('a[data-testid="nowplaying-track-link"]').innerText,
+                        document.querySelector('div[class="_44843c8513baccb36b3fa171573a128f-scss ellipsis-one-line"]').innerText,
+                        document.querySelectorAll('img[class="_31deeacc1d30b0519bfefa0e970ef31d-scss cover-art-image"]')[0].src,
+                        document.querySelector('a[data-testid="nowplaying-track-link"]').href
+                    ]`
+                }, results => {
+                    const res = results[0] as string[];
+                    const name = res[0];
+                    const artists = res[1];
+                    const albumCoverImage = res[2];
+                    const url = res[3];
+                    tryupdate({
+                        src: 'Spotify',
+                        name,
+                        artists,
+                        url,
+                        albumCoverImage,
+                        updatedAt: new Date(),
+                    });
+                });
+            }
         });
     });
 }
@@ -91,7 +122,6 @@ const update = (info: PlayingInfo) => {
     const id = "";
     const oauth = "";
     const message = "auto update by github-now";
-
     const auth = `token ${oauth}`;
     fetch(`https://api.github.com/repos/${id}/${id}/contents/README.template.md`, {
         headers: {
