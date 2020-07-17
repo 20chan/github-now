@@ -1,8 +1,10 @@
 # github-now
 
-![preview](/preview.png)
+![banner](/banner.png)
 
 Update your profile with the song you are listening, using chrome extensions, in real time.
+
+![preview](/preview.png)
 
 ## Supported Platforms
 
