@@ -12,13 +12,20 @@ interface PlayingInfo {
     updatedAt: Date;
 }
 
-chrome.runtime.onInstalled.addListener(d => {
-    chrome.alarms.create('refresh', { periodInMinutes: 1 });
-    chrome.alarms.onAlarm.addListener(a => {
-        if (a.name !== 'refresh') return;
-        report();
-    })
+chrome.alarms.create('refresh', { periodInMinutes: 1 });
+chrome.alarms.onAlarm.addListener(a => {
+    if (a.name !== 'refresh') return;
     report();
+});
+
+chrome.browserAction.onClicked.addListener(tab => {
+    report();
+});
+
+chrome.runtime.onMessage.addListener((message, sender) => {
+    if (message.data === "manualReport") {
+        report();
+    }
 });
 
 const report = () => {
