@@ -141,7 +141,7 @@ const update = (info: PlayingInfo) => {
         .replace("{CURRENT_PLAYING_RELEASED}", info.year)
         .replace("{CURRENT_PLAYING_ALBUM_SRC}", info.albumCoverImage)
         .replace("{CURRENT_PLAYING_URL}", info.url)
-        .replace("{CURRENT_PLAYING_LAST_UPDATED}", moment(info.updatedAt).format('DD/MM/YYYY HH:mm'));
+        .replace("{CURRENT_PLAYING_LAST_UPDATED}", moment(info.updatedAt).format('MM/DD/YYYY HH:mm'));
         const encoded = btoa(unescape(encodeURIComponent(content)));
         const target = await fetch(`https://api.github.com/repos/${id}/${id}/contents/README.md`);
         const sha = (await target.json()).sha;
