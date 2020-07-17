@@ -37,3 +37,13 @@ Beware it's WIP project;
 - [ ] Template file name via extension settings
 - [ ] DateTime format with template engine supports
 - [ ] More platform than youtube music
+
+## Known Issues
+
+### Unchecked runtime.lastError: The tab was closed
+
+Maybe tab iterating related
+
+### javascript chrome.tabs.executescript Cannot read property '0' of undefined
+
+Sometimes `chrome.tabs.executeScript` returns empty array
