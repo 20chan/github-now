@@ -12,8 +12,8 @@
     "clean": "rm -rf dist && cpy manifest.json dist && cpy src/assets/* dist/assets",
     "prebuild": "npm run clean",
     "prewatch": "npm run clean",
-    "build:config-popup": "npm run build --prefix src/config-popup && cd src/config-popup/build && cpy * /static/* ../../../dist/config-popup --parents",
-    "watch:config-popup": "npm run watch:build --prefix src/config-popup"
+    "build:options": "npm run build --prefix src/options && cd src/options/build && cpy * /static/* ../../../dist/options --parents",
+    "watch:options": "npm run watch:build --prefix src/options"
   },
   "keywords": [],
   "author": "",

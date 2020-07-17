@@ -1,5 +1,5 @@
 {
-  "name": "config-popup",
+  "name": "options",
   "version": "0.1.0",
   "homepage": "./",
   "private": true,
@@ -21,7 +21,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "watch:build": "cra-build-watch -v --build-path ../../dist/config-popup"
+    "watch:build": "cra-build-watch -v --build-path ../../dist/options"
   },
   "eslintConfig": {
     "extends": "react-app"
