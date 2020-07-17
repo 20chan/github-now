@@ -122,6 +122,7 @@ const update = (info: PlayingInfo) => {
     const id = "";
     const oauth = "";
     const message = "auto update by github-now";
+
     const auth = `token ${oauth}`;
     fetch(`https://api.github.com/repos/${id}/${id}/contents/README.template.md`, {
         headers: {
