@@ -1,26 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [id, setId] = React.useState('');
+  const [key, setKey] = React.useState('');
+
+  const sync = () => {
+    chrome.storage.local.set({ id, key }, () => {
+      chrome.runtime.sendMessage('optionChanged');
+      console.log("id and key saved");
+    });
+  }
+
+  React.useEffect(() => {
+    chrome.storage.local.get(['id', 'key'], res => {
+      setId(res.id);
+      setKey(res.key);
+    });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <label>
+        <span>id</span>
+        <input onChange={c => setId(c.currentTarget.value)} value={id} />
+      </label>
+      <label>
+        <span>oauth key</span>
+        <input onChange={c => setKey(c.currentTarget.value)} value={key} />
+      </label>
+
+      <button onClick={sync}>Save</button>
     </div>
-  );
+  )
 }
 
 export default App;
