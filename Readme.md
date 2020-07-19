@@ -35,7 +35,7 @@ Beware it's WIP project;
 
 ## Todo
 
-- [ ] Account/OAuth config via extension settings
+- [x] Account/OAuth config via extension settings
 - [ ] Template file name via extension settings
 - [ ] DateTime format with template engine supports
 - [ ] More platform than youtube music
