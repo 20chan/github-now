@@ -72,11 +72,10 @@ const report = () => {
 
             chrome.storage.local.get(['last'], res => {
                 const last = res.last as PlayingInfo;
-                if (isUndefined(last)) {
-                    return;
-                }
-                if (last.src === info.src && last.name === info.name && last.artists === info.artists) {
-                    return;
+                if (!isUndefined(last)) {
+                    if (last.src === info.src && last.name === info.name && last.artists === info.artists) {
+                        return;
+                    }
                 }
 
                 chrome.storage.local.set({ last: info });
