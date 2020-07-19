@@ -145,6 +145,12 @@ const update = (info: PlayingInfo) => {
             },
         }).then(async resp => {
             const json = await resp.json();
+
+            if (resp.status !== 200) {
+                console.error(json.message);
+                return;
+            }
+
             const template = decodeURIComponent(escape(atob(json.content)));
             // looks like need a template engine..
             const content = template
@@ -175,6 +181,12 @@ const update = (info: PlayingInfo) => {
                         },
                     }),
                 });
+
+                if (postResp.status !== 200) {
+                    const postJson = await postResp.json();
+                    console.error(postJson.message);
+                    return;
+                }
 
                 if (postResp.ok) {
                     console.log("updated");
