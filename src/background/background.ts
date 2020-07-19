@@ -12,13 +12,42 @@ interface PlayingInfo {
     updatedAt: Date;
 }
 
+const enable = () => {
+    chrome.storage.local.get(['enabled'], items => {
+        if (items.enabled !== true) {
+            chrome.storage.local.set({ enabled: true }, () => {
+                chrome.alarms.create('refresh', { periodInMinutes: 1 });
+                report();
+            });
+        }
+        chrome.browserAction.setIcon({ path: '/assets/24.png' });
+    });
+};
+
+const disable = () => {
+    chrome.storage.local.get(['enabled'], items => {
+        if (items.enabled !== false) {
+            chrome.storage.local.set({ enabled: false }, () => {
+                chrome.alarms.clear('refresh');
+            });
+        }
+        chrome.browserAction.setIcon({ path: '/assets/24-grayscale.png' });
+    });
+}
+
 chrome.alarms.onAlarm.addListener(a => {
     if (a.name !== 'refresh') return;
     report();
 });
 
 chrome.browserAction.onClicked.addListener(tab => {
-    report();
+    chrome.storage.local.get(['enabled'], items => {
+        if (items.enabled === true) {
+            disable();
+        } else if (items.enabled === false || items.enabled === undefined) {
+            enable();
+        }
+    });
 });
 
 chrome.runtime.onMessage.addListener((message, sender) => {
@@ -27,11 +56,18 @@ chrome.runtime.onMessage.addListener((message, sender) => {
     }
 
     if (message.data === 'enabled') {
-        chrome.alarms.create('refresh', { periodInMinutes: 1 });
-        report();
+        enable();
     }
     if (message.data === 'disabled') {
-        chrome.alarms.clear('refresh');
+        disable();
+    }
+});
+
+chrome.storage.local.get(['enabled'], items => {
+    if (items.enabled === true) {
+        enable();
+    } else {
+        disable();
     }
 });
 
@@ -134,7 +170,7 @@ const report = () => {
 }
 
 const update = (info: PlayingInfo) => {
-    chrome.storage.local.get(['id', 'oauth'], items => {
+    chrome.storage.local.get(['id', 'key'], items => {
         const id = items.id as string;
         const oauth = items.key as string;
         const message = 'auto update by github-now';
