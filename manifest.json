@@ -11,7 +11,7 @@
     },
     "author": "20chan",
     "homepage_url": "https://github.com/20chan/github-now",
-    "permissions": ["tabs", "activeTab", "storage", "alarms", "*://*/*"],
+    "permissions": ["tabs", "storage", "alarms", "https://github.com/*", "https://soundcloud.com/*", "https://music.youtube.com/*", "https://open.spotify.com/*"],
     "content_scripts": [
       {
         "js": ["contentscript.js"],
