@@ -18,9 +18,16 @@ Beware it's WIP project;
 
 1. Create and edit `README.template.md` file in profile repository
 2. Create github personal oauth token with `repo` scopes
-3. Edit [background.ts](/src/background/background.ts), line 123 and 124, replace id and oauth token
-4. `npm install && npm run build`
-5. Install unpacked extension in chrome, `/dist`
+3. Download latest release from [Releases](https://github.com/20chan/github-now/releases), and unzip into empty directory
+3. In the `chrome://extensions/` page, click the Load unpacked extension and select unzipped directory
+4. Go to extension option page and fill `id` and `oauth key` field and click save
+5. You're done!
+
+## Downloads
+
+Latest 1.0.0 is available on [Releases](https://github.com/20chan/github-now/releases).
+
+> I published github-now to Chrome Web Store publication and it will take times.
 
 ## Templates
 
