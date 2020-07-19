@@ -14,8 +14,6 @@ Update your profile with the song you are listening, using chrome extensions, in
 
 ## Howto
 
-Beware it's WIP project;
-
 1. Create and edit `README.template.md` file in profile repository
 2. Create github personal oauth token with `repo` scopes
 3. Download latest release from [Releases](https://github.com/20chan/github-now/releases), and unzip into empty directory
