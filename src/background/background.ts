@@ -13,24 +13,16 @@ interface PlayingInfo {
 }
 
 const enable = () => {
-    chrome.storage.local.get(['enabled'], items => {
-        if (items.enabled !== true) {
-            chrome.storage.local.set({ enabled: true }, () => {
-                chrome.alarms.create('refresh', { periodInMinutes: 1 });
-                report();
-            });
-        }
+    chrome.storage.local.set({ enabled: true }, () => {
+        chrome.alarms.create('refresh', { periodInMinutes: 1 });
+        report();
         chrome.browserAction.setIcon({ path: '/assets/24.png' });
     });
 };
 
 const disable = () => {
-    chrome.storage.local.get(['enabled'], items => {
-        if (items.enabled !== false) {
-            chrome.storage.local.set({ enabled: false }, () => {
-                chrome.alarms.clear('refresh');
-            });
-        }
+    chrome.storage.local.set({ enabled: false }, () => {
+        chrome.alarms.clear('refresh');
         chrome.browserAction.setIcon({ path: '/assets/24-grayscale.png' });
     });
 }
@@ -54,7 +46,6 @@ chrome.runtime.onMessage.addListener((message, sender) => {
     if (message.data === 'manualReport') {
         report();
     }
-
     if (message.data === 'enabled') {
         enable();
     }
@@ -72,14 +63,14 @@ chrome.storage.local.get(['enabled'], items => {
 });
 
 const report = () => {
-    chrome.tabs.query({audible: true}, tabs => {
+    chrome.tabs.query({ audible: true }, tabs => {
         var updated = false;
         const tryupdate = (info: PlayingInfo) => {
             if (updated) {
                 return;
             }
 
-            chrome.storage.sync.get(['last'], res => {
+            chrome.storage.local.get(['last'], res => {
                 const last = res.last as PlayingInfo;
                 if (isUndefined(last)) {
                     return;
@@ -87,11 +78,11 @@ const report = () => {
                 if (last.src === info.src && last.name === info.name && last.artists === info.artists) {
                     return;
                 }
-            });
 
-            chrome.storage.sync.set({ 'last': info });
-            update(info);
-            updated = true;
+                chrome.storage.local.set({ last: info });
+                update(info);
+                updated = true;
+            });
         }
         tabs.forEach(t => {
             if (t.audible && t.url.startsWith('https://soundcloud.com/')) {
