@@ -1,6 +1,7 @@
 {
     "manifest_version": 2,
     "name": "github-now",
+    "description": "Update your github profile with the song you are listening",
     "version": "1.0.0",
     "icons": {
       "24": "assets/24.png",
@@ -8,6 +9,8 @@
       "64": "assets/64.png",
       "512": "assets/512.png"
     },
+    "author": "20chan",
+    "homepage_url": "https://github.com/20chan/github-now",
     "permissions": ["tabs", "activeTab", "storage", "alarms", "*://*/*"],
     "content_scripts": [
       {
