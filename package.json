@@ -12,8 +12,10 @@
     "clean": "rm -rf dist && cpy manifest.json dist && cpy src/assets/* dist/assets",
     "prebuild": "npm run clean",
     "prewatch": "npm run clean",
-    "build:options": "npm run build --prefix src/options && cd src/options/build && cpy * /static/* ../../../dist/options --parents",
-    "watch:options": "npm run watch:build --prefix src/options"
+    "build:options": "npm run build --prefix src/options && cd src/options/build && rm manifest.json && cpy * /static/* ../../../dist/options --parents",
+    "watch:options": "npm run watch:build --prefix src/options",
+    "build:all": "npm run build && npm run build:options",
+    "zip": "bestzip github-now.zip dist/* && mkdir --parents release/ && mv github-now.zip release/"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,7 @@
     "@types/chrome": "0.0.120",
     "@types/node": "^14.0.23",
     "awesome-typescript-loader": "^5.2.1",
+    "bestzip": "^2.1.5",
     "cpy-cli": "^3.1.1",
     "cra-build-watch": "^3.2.0",
     "css-loader": "^3.6.0",
