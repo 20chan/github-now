@@ -10,6 +10,7 @@ interface PlayingInfo {
     url?: string;
     albumCoverImage: string;
     updatedAt: Date;
+    liked?: boolean;
 }
 
 const enable = () => {
@@ -86,11 +87,18 @@ const report = () => {
         tabs.forEach(t => {
             if (t.audible && t.url.startsWith('https://soundcloud.com/')) {
                 chrome.tabs.executeScript(t.id, {
-                    code: "[document.querySelector('.playControls__soundBadge .playbackSoundBadge__titleLink').title, document.querySelector('.playControls__soundBadge .playbackSoundBadge__lightLink').title, document.querySelector('.playControls__soundBadge .playbackSoundBadge__titleLink').href, document.querySelector('.playControls__soundBadge span.sc-artwork').style.backgroundImage]"
+                    code: `[
+                        document.querySelector('.playControls__soundBadge .playbackSoundBadge__titleLink').title,
+                        document.querySelector('.playControls__soundBadge .playbackSoundBadge__lightLink').title,
+                        document.querySelector('.playControls__soundBadge .playbackSoundBadge__titleLink').href,
+                        document.querySelector('.playControls__soundBadge span.sc-artwork').style.backgroundImage,
+                        document.querySelector('.playbackSoundBadge__actions .sc-button-like').getAttribute('aria-label'),
+                    ]`
                 }, results => {
                     const res = results[0] as string[];
-                    const [name, artists, url, albumCoverImg] = res;
+                    const [name, artists, url, albumCoverImg, likeLabel] = res;
                     const albumCoverImgSrc = new RegExp('url\\(\\"(.*)\\"\\)').exec(albumCoverImg)[1];
+                    const liked = likeLabel === 'Unlike';
                     tryupdate({
                         src: 'SoundCloud',
                         name,
@@ -98,12 +106,18 @@ const report = () => {
                         url,
                         albumCoverImage: albumCoverImgSrc,
                         updatedAt: new Date(),
+                        liked,
                     });
                 });
             }
             if (t.audible && t.url.startsWith('https://music.youtube.com/')) {
                 chrome.tabs.executeScript(t.id, {
-                    code: "[document.querySelector('yt-formatted-string.ytmusic-player-bar.title').innerText, document.querySelector('yt-formatted-string.ytmusic-player-bar.byline').title, document.querySelector('img.ytmusic-player-bar').src, document.querySelector('.ytmusic-player-bar .yt-simple-endpoint').href]"
+                    code: `[
+                        document.querySelector('yt-formatted-string.ytmusic-player-bar.title').innerText,
+                        document.querySelector('yt-formatted-string.ytmusic-player-bar.byline').title, document.querySelector('img.ytmusic-player-bar').src,
+                        document.querySelector('.ytmusic-player-bar .yt-simple-endpoint').href,
+                        document.querySelector('paper-icon-button.like').getAttribute('aria-pressed'),
+                    ]`
                 }, results => {
                     const res = results[0] as string[];
                     const name = res[0];
@@ -112,6 +126,7 @@ const report = () => {
                     const albumCoverImgSrc = res[2];
                     const albumCoverImgOriginal = new RegExp('(.*)=.*').exec(albumCoverImgSrc)[1];
                     const url = res[3];
+                    const liked = res[4] === 'true';
                     tryupdate({
                         src: 'YTMusic',
                         name,
@@ -121,6 +136,7 @@ const report = () => {
                         url,
                         albumCoverImage: albumCoverImgOriginal,
                         updatedAt: new Date(),
+                        liked: liked,
                     });
                 });
             }
