@@ -15,7 +15,7 @@
     "build:options": "npm run build --prefix src/options && cd src/options/build && rm manifest.json && cpy * /static/* ../../../dist/options --parents",
     "watch:options": "npm run watch:build --prefix src/options",
     "build:all": "npm run build && npm run build:options",
-    "zip": "bestzip github-now.zip dist/* && mkdir --parents release/ && mv github-now.zip release/"
+    "zip": "bestzip github-now.zip dist/* && mkdir -p release/ && mv github-now.zip release/"
   },
   "keywords": [],
   "author": "",
