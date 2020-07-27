@@ -23,7 +23,7 @@ Update your profile with the song you are listening, using chrome extensions, in
 
 ## Downloads
 
-Latest 1.0.0 is available on [Releases](https://github.com/20chan/github-now/releases).
+Latest 1.0.1 is available on [Releases](https://github.com/20chan/github-now/releases).
 
 > I published github-now to Chrome Web Store publication and it will take times.
 
