@@ -114,8 +114,9 @@ const report = () => {
                 chrome.tabs.executeScript(t.id, {
                     code: `[
                         document.querySelector('yt-formatted-string.ytmusic-player-bar.title').innerText,
-                        document.querySelector('yt-formatted-string.ytmusic-player-bar.byline').title, document.querySelector('img.ytmusic-player-bar').src,
-                        document.querySelector('.ytmusic-player-bar .yt-simple-endpoint').href,
+                        document.querySelector('yt-formatted-string.ytmusic-player-bar.byline').title,
+                        document.querySelector('img.ytmusic-player-bar').src,
+                        document.querySelector('.ytmusic-player-bar .yt-simple-endpoint')?.href,
                         document.querySelector('paper-icon-button.like').getAttribute('aria-pressed'),
                     ]`
                 }, results => {
@@ -125,7 +126,7 @@ const report = () => {
                     const [artists, album, year] = infos;
                     const albumCoverImgSrc = res[2];
                     const albumCoverImgOriginal = new RegExp('(.*)=.*').exec(albumCoverImgSrc)[1];
-                    const url = res[3];
+                    const url = res[3] ?? `https://music.youtube.com/watch?v=${new RegExp('vi/(.*)/.*').exec(albumCoverImgSrc)[1]}`;
                     const liked = res[4] === 'true';
                     tryupdate({
                         src: 'YTMusic',
