@@ -186,8 +186,8 @@ const report = () => {
                     const res = results[0] as string[];
                     const verified = res[5];
                     if (verified === 'true') {
-                        const name = res[0];
                         const artists = res[1];
+                        const name = res[0].replace(artists + " - ", ""); // Remove artist from music title.
                         const albumCoverImage = res[2];
                         const url = res[3];
                         const liked = res[4] === 'true';
