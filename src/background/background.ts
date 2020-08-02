@@ -2,7 +2,7 @@ import { isUndefined } from "util";
 import { format } from 'fecha';
 
 interface PlayingInfo {
-    src: 'YTMusic' | 'SoundCloud' | 'Spotify';
+    src: 'YTMusic' | 'SoundCloud' | 'Spotify' | 'YouTube';
     name: string;
     artists: string;
     album?: string;
@@ -170,6 +170,37 @@ const report = () => {
                         albumCoverImage,
                         updatedAt: new Date(),
                     });
+                });
+            }
+            if (t.audible && t.url.startsWith('https://www.youtube.com/')) {
+                chrome.tabs.executeScript(t.id, {
+                    code: `[
+                        document.querySelector('.title').innerText,
+                        document.querySelector('ytd-channel-name').innerText,
+                        document.querySelector('ytd-video-owner-renderer img').src,
+                        document.querySelector('ytd-video-owner-renderer a').href,
+                        document.querySelector('ytd-video-primary-info-renderer yt-icon-button button')?.getAttribute('aria-pressed'),
+                        (!!document.querySelector('ytd-video-owner-renderer .badge-style-type-verified-artist')).toString(),
+                    ]`
+                }, results => {
+                    const res = results[0] as string[];
+                    const verified = res[5];
+                    if (verified === 'true') {
+                        const name = res[0];
+                        const artists = res[1];
+                        const albumCoverImage = res[2];
+                        const url = res[3];
+                        const liked = res[4] === 'true';
+                        tryupdate({
+                            src: 'YouTube',
+                            name,
+                            artists,
+                            url,
+                            albumCoverImage,
+                            updatedAt: new Date(),
+                            liked: liked,
+                        });
+                    }
                 });
             }
         });
