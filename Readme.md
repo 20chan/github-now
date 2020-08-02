@@ -8,6 +8,7 @@ Update your profile with the song you are listening, using chrome extensions, in
 
 ## Supported Platforms
 
+- YouTube
 - Youtube Music
 - Soundcloud
 - Spotify
