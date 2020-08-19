@@ -12,6 +12,7 @@ Update your profile with the song you are listening, using chrome extensions, in
 - Youtube Music
 - Soundcloud
 - Spotify
+- Jamendo Music
 
 ## Howto
 
