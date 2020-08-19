@@ -25,6 +25,8 @@ Update your profile with the song you are listening, using chrome extensions, in
 
 ## Downloads
 
+You can download 1.0.0 at [Chrome Web Store](https://chrome.google.com/webstore/detail/github-now/kokofjekemkckglmfpnoanadmjolbanj). (v1.0.2 is processing)
+
 Latest 1.0.2 is available on [Releases](https://github.com/20chan/github-now/releases).
 
 > I published github-now to Chrome Web Store publication and it will take times.
