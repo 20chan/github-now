@@ -208,13 +208,18 @@ const report = () => {
                     code: `[
                         document.getElementsByClassName('player-mini_track_information_title js-player-name')[0].innerText,
                         document.getElementsByClassName('player-mini_track_information_artist js-player-artistId')[0].innerText,
-                        new URL(new URL(document.getElementsByClassName('js-full-player-cover-img')[0].src).pathname.split("/")[3] + '/' + 
-                        document.getElementsByClassName('player-mini_track_information_title js-player-name')[0].innerText.replace("(", "").replace(")", ""), 'https://www.jamendo.com/track/').href,
+                        new URL(new URL(document.getElementsByClassName('js-full-player-cover-img')[0].src).pathname.split("/")[3] + '/' + document.getElementsByClassName('player-mini_track_information_title js-player-name')[0].innerText.replace("(", "").replace(")", ""), 'https://www.jamendo.com/track/').href,
                         document.getElementsByClassName('js-full-player-cover-img')[0].src,
+                        (document.getElementsByClassName('btn-icon btn--overlay is-on')[0] != undefined).toString(),
                     ]`
                 }, results => {
                     const res = results[0] as string[];
-                    const [name, artists, url, albumCoverImg] = res;
+                    const name = res[0];
+                    const artists = res[1];
+                    const url = res[2];
+                    const albumCoverImg = res[3].split("?")[0];
+                    const liked = (res[4] == "true") 
+                    
                     tryupdate({
                         src: 'Jamendo',
                         name,
@@ -222,7 +227,7 @@ const report = () => {
                         url,
                         albumCoverImage: albumCoverImg,
                         updatedAt: new Date(),
-                        liked:false,
+                        liked,
                     });
                 });
             }
