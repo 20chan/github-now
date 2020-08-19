@@ -2,7 +2,7 @@ import { isUndefined } from "util";
 import { format } from 'fecha';
 
 interface PlayingInfo {
-    src: 'YTMusic' | 'SoundCloud' | 'Spotify' | 'YouTube';
+    src: 'YTMusic' | 'SoundCloud' | 'Spotify' | 'YouTube' | 'Jamendo';
     name: string;
     artists: string;
     album?: string;
@@ -201,6 +201,29 @@ const report = () => {
                             liked: liked,
                         });
                     }
+                });
+            }
+            if (t.audible && t.url.startsWith('https://www.jamendo.com/')) {
+                chrome.tabs.executeScript(t.id, {
+                    code: `[
+                        document.getElementsByClassName('player-mini_track_information_title js-player-name')[0].innerText,
+                        document.getElementsByClassName('player-mini_track_information_artist js-player-artistId')[0].innerText,
+                        new URL(new URL(document.getElementsByClassName('js-full-player-cover-img')[0].src).pathname.split("/")[3] + '/' + 
+                        document.getElementsByClassName('player-mini_track_information_title js-player-name')[0].innerText.replace("(", "").replace(")", ""), 'https://www.jamendo.com/track/').href,
+                        document.getElementsByClassName('js-full-player-cover-img')[0].src,
+                    ]`
+                }, results => {
+                    const res = results[0] as string[];
+                    const [name, artists, url, albumCoverImg] = res;
+                    tryupdate({
+                        src: 'Jamendo',
+                        name,
+                        artists,
+                        url,
+                        albumCoverImage: albumCoverImg,
+                        updatedAt: new Date(),
+                        liked:false,
+                    });
                 });
             }
         });
