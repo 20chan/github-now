@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "github-now",
     "description": "Update your github profile with the song you are listening",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "icons": {
       "24": "assets/24.png",
       "32": "assets/32.png",
@@ -11,7 +11,7 @@
     },
     "author": "20chan",
     "homepage_url": "https://github.com/20chan/github-now",
-    "permissions": ["tabs", "storage", "alarms", "https://github.com/*", "https://soundcloud.com/*", "https://music.youtube.com/*", "https://open.spotify.com/*", "https://www.youtube.com/*"],
+    "permissions": ["tabs", "storage", "alarms", "https://github.com/*", "https://soundcloud.com/*", "https://music.youtube.com/*", "https://open.spotify.com/*", "https://www.youtube.com/*", "https://www.jamendo.com/*"],
     "content_scripts": [
       {
         "js": ["contentscript.js"],
