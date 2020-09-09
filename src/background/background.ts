@@ -79,9 +79,12 @@ const report = () => {
                     }
                 }
 
-                chrome.storage.local.set({ last: info });
-                update(info);
-                updated = true;
+                update(info).then(succeed => {
+                    if (succeed) {
+                        chrome.storage.local.set({ last: info });
+                        updated = true;
+                    }
+                });
             });
         }
         tabs.forEach(t => {
@@ -235,66 +238,102 @@ const report = () => {
     });
 }
 
-const update = (info: PlayingInfo) => {
-    chrome.storage.local.get(['id', 'key'], items => {
-        const id = items.id as string;
-        const oauth = items.key as string;
-        const message = 'auto update by github-now';
-        const auth = `token ${oauth}`;
-        fetch(`https://api.github.com/repos/${id}/${id}/contents/README.template.md`, {
-            headers: {
-                "Authorization": auth
-            },
-        }).then(async resp => {
-            const json = await resp.json();
-
-            if (resp.status !== 200) {
-                console.error(json.message);
-                return;
-            }
-
-            const template = decodeURIComponent(escape(atob(json.content)));
-            // looks like need a template engine..
-            const content = template
-            .replace("{CURRENT_PLAYING_SOURCE}", info.src)
-            .replace("{CURRENT_PLAYING_NAME}", info.name)
-            .replace("{CURRENT_PLAYING_ARTISTS}", info.artists)
-            .replace("{CURRENT_PLAYING_ALBUM}", info.album)
-            .replace("{CURRENT_PLAYING_RELEASED}", info.year)
-            .replace("{CURRENT_PLAYING_ALBUM_SRC}", info.albumCoverImage)
-            .replace("{CURRENT_PLAYING_URL}", info.url)
-            .replace("{CURRENT_PLAYING_LAST_UPDATED}", format(info.updatedAt, 'MM/DD/YYYY HH:mm'));
-            const encoded = btoa(unescape(encodeURIComponent(content)));
-            const target = await fetch(`https://api.github.com/repos/${id}/${id}/contents/README.md`);
-            const sha = (await target.json()).sha;
+const update = (info: PlayingInfo): Promise<boolean> => {
+    return new Promise<boolean>(resolve => {
+        chrome.storage.local.get(['id', 'key', 'etag', 'modified'], items => {
+            const id = items.id as string;
+            const oauth = items.key as string;
+            const lastEtag = items.etag as string;
+            const lastModified = items.modified as string;
+            const message = 'auto update by github-now';
+            const auth = `token ${oauth}`;
             try {
-                const postResp = await fetch(`https://api.github.com/repos/${id}/${id}/contents/README.md`, {
-                    method: "PUT",
+                fetch(`https://api.github.com/repos/${id}/${id}/contents/README.template.md`, {
                     headers: {
                         "Authorization": auth
                     },
-                    body: JSON.stringify({
-                        "message": message,
-                        "content": encoded,
-                        "sha": sha,
-                        "committer": {
-                            "name": "github-now",
-                            "email": "2+github-now@0chan.dev",
-                        },
-                    }),
+                }).then(async resp => {
+                    const json = await resp.json();
+
+                    if (resp.status !== 200) {
+                        console.error(json.message);
+                        return;
+                    }
+
+                    const template = decodeURIComponent(escape(atob(json.content)));
+                    // looks like need a template engine..
+                    const content = template
+                    .replace("{CURRENT_PLAYING_SOURCE}", info.src)
+                    .replace("{CURRENT_PLAYING_NAME}", info.name)
+                    .replace("{CURRENT_PLAYING_ARTISTS}", info.artists)
+                    .replace("{CURRENT_PLAYING_ALBUM}", info.album)
+                    .replace("{CURRENT_PLAYING_RELEASED}", info.year)
+                    .replace("{CURRENT_PLAYING_ALBUM_SRC}", info.albumCoverImage)
+                    .replace("{CURRENT_PLAYING_URL}", info.url)
+                    .replace("{CURRENT_PLAYING_LAST_UPDATED}", format(info.updatedAt, 'MM/DD/YYYY HH:mm'));
+                    const encoded = btoa(unescape(encodeURIComponent(content)));
+                    const headers = isUndefined(lastEtag) ? {} : {
+                        "If-Modified-Since": lastModified,
+                        "If-None-Match": lastEtag,
+                    };
+                    const target = await fetch(`https://api.github.com/repos/${id}/${id}/contents/README.md`, {
+                        headers,
+                    });
+                    const etag = target.headers.get("ETag");
+                    const modified = target.headers.get("Last-Modified");
+                    chrome.storage.local.set({ etag, modified });
+
+                    if (target.status === 304) {
+                        console.log("got cached; retry after 1 second");
+                        setTimeout(report, 1000);
+                        resolve(false);
+                        return;
+                    }
+
+                    const sha = (await target.json()).sha;
+                    try {
+                        const postResp = await fetch(`https://api.github.com/repos/${id}/${id}/contents/README.md`, {
+                            method: "PUT",
+                            headers: {
+                                "Authorization": auth
+                            },
+                            body: JSON.stringify({
+                                "message": message,
+                                "content": encoded,
+                                "sha": sha,
+                                "committer": {
+                                    "name": "github-now",
+                                    "email": "2+github-now@0chan.dev",
+                                },
+                            }),
+                        });
+
+                        if (postResp.status === 409) {
+                            console.log("cached");
+                            resolve(false);
+                            return;
+                        }
+
+                        if (postResp.status !== 200) {
+                            const postJson = await postResp.json();
+                            console.error(postJson.message);
+                            resolve(false);
+                            return;
+                        }
+
+                        if (postResp.ok) {
+                            resolve(true);
+                            console.log("updated");
+                            return;
+                        }
+                        resolve(false);
+                    } catch (postResp) {
+                        console.log(`Error ${postResp}`);
+                        resolve(false);
+                    }
                 });
-
-                if (postResp.status !== 200) {
-                    const postJson = await postResp.json();
-                    console.error(postJson.message);
-                    return;
-                }
-
-                if (postResp.ok) {
-                    console.log("updated");
-                }
-            } catch (postResp) {
-                console.log(`Error ${postResp}`);
+            } catch {
+                resolve(false);
             }
         });
     });
