@@ -27,9 +27,7 @@ Update your profile with the song you are listening, using chrome extensions, in
 
 You can download official latest version at [Chrome Web Store](https://chrome.google.com/webstore/detail/github-now/kokofjekemkckglmfpnoanadmjolbanj).
 
-Unzipped latest 1.0.2 is available on [Releases](https://github.com/20chan/github-now/releases).
-
-> I published github-now to Chrome Web Store publication and it will take times.
+Unzipped latest 1.0.3 is available on [Releases](https://github.com/20chan/github-now/releases).
 
 ## Templates
 
@@ -47,14 +45,3 @@ Unzipped latest 1.0.2 is available on [Releases](https://github.com/20chan/githu
 - [x] Account/OAuth config via extension settings
 - [ ] Template file name via extension settings
 - [ ] DateTime format with template engine supports
-- [ ] More platform than youtube music
-
-## Known Issues
-
-### Unchecked runtime.lastError: The tab was closed
-
-Maybe tab iterating related
-
-### javascript chrome.tabs.executescript Cannot read property '0' of undefined
-
-Sometimes `chrome.tabs.executeScript` returns empty array
