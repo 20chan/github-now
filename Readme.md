@@ -2,7 +2,7 @@
 
 ![banner](/banner.png)
 
-Update your profile with the song you are listening, using chrome extensions, in real time.
+Generate Github profile with current listening music as a web browser extension for chrome.
 
 ![preview](/preview.png)
 
