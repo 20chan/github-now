@@ -100,14 +100,15 @@ const report = () => {
                 }, results => {
                     const res = results[0] as string[];
                     const [name, artists, url, albumCoverImg, likeLabel] = res;
-                    const albumCoverImgSrc = new RegExp('url\\(\\"(.*)\\"\\)').exec(albumCoverImg)[1];
+                    const albumCoverImgSmallSrc = new RegExp('url\\(\\"(.*)\\"\\)').exec(albumCoverImg)[1];
+                    const albumCoverImgBigSrc = (albumCoverImgSmallSrc || '').replace('50x50', '500x500');
                     const liked = likeLabel === 'Unlike';
                     tryupdate({
                         src: 'SoundCloud',
                         name,
                         artists,
                         url,
-                        albumCoverImage: albumCoverImgSrc,
+                        albumCoverImage: albumCoverImgBigSrc,
                         updatedAt: new Date(),
                         liked,
                     });
