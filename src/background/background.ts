@@ -73,7 +73,7 @@ const report = () => {
 
             chrome.storage.local.get(['last'], res => {
                 const last = res.last as PlayingInfo;
-                if (!isUndefined(last)) {
+                if (last !== undefined) {
                     if (last.src === info.src && last.name === info.name && last.artists === info.artists) {
                         return;
                     }
@@ -157,16 +157,15 @@ const report = () => {
                      */
                     code: `[
                         document.querySelector('a[data-testid="nowplaying-track-link"]').innerText,
-                        document.querySelector('div[class="_44843c8513baccb36b3fa171573a128f-scss ellipsis-one-line"]').innerText,
-                        document.querySelectorAll('img[class="_31deeacc1d30b0519bfefa0e970ef31d-scss cover-art-image"]')[0].src,
+                        [...document.querySelectorAll('div[class="Root__top-container"] div[class="now-playing-bar"] span span a')].map(x => x.innerText),
+                        document.querySelector('div[class*="cover-art shadow"] img').src,
                         document.querySelector('a[data-testid="nowplaying-track-link"]').href
                     ]`
                 }, results => {
-                    const res = results[0] as string[];
-                    const name = res[0];
-                    const artists = res[1];
-                    const albumCoverImage = res[2];
-                    const url = res[3];
+                    const name = results[0][0];
+                    const artists = (results[0][1] as string[]).join(' ');
+                    const albumCoverImage = results[0][2];
+                    const url = results[0][3];
                     tryupdate({
                         src: 'Spotify',
                         name,
@@ -268,7 +267,7 @@ const update = (info: PlayingInfo): Promise<boolean> => {
                     .replace("{CURRENT_PLAYING_SOURCE}", info.src)
                     .replace("{CURRENT_PLAYING_NAME}", info.name)
                     .replace("{CURRENT_PLAYING_ARTISTS}", info.artists)
-                    .replace("{CURRENT_PLAYING_ALBUM}", info.album)
+                    .replace("{CURRENT_PLAYING_ALBUM}", info.album ?? 'Not supported')
                     .replace("{CURRENT_PLAYING_RELEASED}", info.year)
                     .replace("{CURRENT_PLAYING_ALBUM_SRC}", info.albumCoverImage)
                     .replace("{CURRENT_PLAYING_URL}", info.url)
