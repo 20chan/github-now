@@ -1,4 +1,3 @@
-import { isUndefined } from "util";
 import { format } from 'fecha';
 
 interface PlayingInfo {
@@ -222,8 +221,8 @@ const report = () => {
                     const artists = res[1];
                     const url = res[2];
                     const albumCoverImg = res[3].split("?")[0];
-                    const liked = (res[4] == "true") 
-                    
+                    const liked = (res[4] == "true");
+
                     tryupdate({
                         src: 'Jamendo',
                         name,
@@ -264,16 +263,16 @@ const update = (info: PlayingInfo): Promise<boolean> => {
                     const template = decodeURIComponent(escape(atob(json.content)));
                     // looks like need a template engine..
                     const content = template
-                    .replace("{CURRENT_PLAYING_SOURCE}", info.src)
-                    .replace("{CURRENT_PLAYING_NAME}", info.name)
-                    .replace("{CURRENT_PLAYING_ARTISTS}", info.artists)
-                    .replace("{CURRENT_PLAYING_ALBUM}", info.album ?? 'Not supported')
-                    .replace("{CURRENT_PLAYING_RELEASED}", info.year)
-                    .replace("{CURRENT_PLAYING_ALBUM_SRC}", info.albumCoverImage)
-                    .replace("{CURRENT_PLAYING_URL}", info.url)
-                    .replace("{CURRENT_PLAYING_LAST_UPDATED}", format(info.updatedAt, 'MM/DD/YYYY HH:mm'));
+                        .replace(/{CURRENT_PLAYING_SOURCE}/gi, info.src)
+                        .replace(/{CURRENT_PLAYING_NAME}/gi, info.name)
+                        .replace(/{CURRENT_PLAYING_ARTISTS}/gi, info.artists)
+                        .replace(/{CURRENT_PLAYING_ALBUM}/gi, info.album ?? 'Not supported')
+                        .replace(/{CURRENT_PLAYING_RELEASED}/gi, info.year)
+                        .replace(/{CURRENT_PLAYING_ALBUM_SRC}/gi, info.albumCoverImage)
+                        .replace(/{CURRENT_PLAYING_URL}/gi, info.url)
+                        .replace(/{CURRENT_PLAYING_LAST_UPDATED}/gi, format(info.updatedAt, 'MM/DD/YYYY HH:mm'));
                     const encoded = btoa(unescape(encodeURIComponent(content)));
-                    const headers = isUndefined(lastEtag) ? {} : {
+                    const headers = !lastEtag ? {} : {
                         "If-Modified-Since": lastModified,
                         "If-None-Match": lastEtag,
                     };
