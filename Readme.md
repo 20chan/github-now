@@ -27,7 +27,7 @@ Generate Github profile with current listening music as a web browser extension 
 
 You can download official latest version at [Chrome Web Store](https://chrome.google.com/webstore/detail/github-now/kokofjekemkckglmfpnoanadmjolbanj).
 
-Unzipped latest 1.0.3 is available on [Releases](https://github.com/20chan/github-now/releases).
+Unzipped latest 1.0.5 is available on [Releases](https://github.com/20chan/github-now/releases).
 
 ## Templates
 
