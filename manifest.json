@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "github-now",
     "description": "Update your github profile with the song you are listening",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "icons": {
       "24": "assets/24.png",
       "32": "assets/32.png",
