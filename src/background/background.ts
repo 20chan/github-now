@@ -156,7 +156,7 @@ const report = () => {
                      */
                     code: `[
                         document.querySelector('a[data-testid="nowplaying-track-link"]').innerText,
-                        [...document.querySelectorAll('div[class="Root__top-container"] div[class="now-playing-bar"] span span a')].map(x => x.innerText),
+                        [...document.querySelectorAll('div[class="Root__top-container"] a[data-testid="nowplaying-artist"]')].map(x => x.innerText),
                         document.querySelector('div[class*="cover-art shadow"] img').src,
                         document.querySelector('a[data-testid="nowplaying-track-link"]').href
                     ]`
