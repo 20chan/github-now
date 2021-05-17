@@ -120,7 +120,7 @@ const report = () => {
                         document.querySelector('yt-formatted-string.ytmusic-player-bar.byline').title,
                         document.querySelector('img.ytmusic-player-bar').src,
                         document.querySelector('.ytp-title-link').href,
-                        document.querySelector('paper-icon-button.like').getAttribute('aria-pressed'),
+                        document.querySelector('tp-yt-paper-icon-button.like').getAttribute('aria-pressed'),
                     ]`
                 }, results => {
                     const res = results[0] as string[];
