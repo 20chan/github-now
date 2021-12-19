@@ -179,9 +179,9 @@ const report = () => {
                 chrome.tabs.executeScript(t.id, {
                     code: `[
                         document.querySelector('.title.ytd-video-primary-info-renderer').innerText,
-                        document.querySelector('ytd-video-secondary-info-renderer ytd-channel-name').innerText,
-                        document.querySelector('ytd-video-secondary-info-renderer ytd-video-owner-renderer img').src,
-                        document.querySelector('ytd-video-secondary-info-renderer ytd-video-owner-renderer a').href,
+                        document.querySelector('ytd-channel-name').innerText,
+                        document.querySelector('link[itemprop="thumbnailUrl"]').href,
+                        document.querySelector('link[rel="canonical"]').href,
                         document.querySelector('ytd-video-primary-info-renderer yt-icon-button button')?.getAttribute('aria-pressed'),
                         (!!document.querySelector('ytd-video-secondary-info-renderer ytd-video-owner-renderer .badge-style-type-verified-artist')).toString(),
                     ]`
